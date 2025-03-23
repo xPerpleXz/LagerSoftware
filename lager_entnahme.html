@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lagerentnahme</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background-color: #f4f4f4; }
+        input, button { padding: 8px; margin-top: 10px; }
+        .error { color: red; font-weight: bold; margin-top: 10px; display: none; }
+    </style>
+</head>
+<body>
+    <h1>Lagerentnahme</h1>
+    
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>EAN</th>
+            <th>Artikelname</th>
+            <th>Bestand</th>
+            <th>Entnehmen</th>
+        </tr>
+        {% for artikel in artikel %}
+        <tr>
+            <td>{{ artikel._id }}</td>
+            <td>{{ artikel.ean if artikel.ean else '—' }}</td>
+            <td>{{ artikel.artikelname }}</td>
+            <td>{{ artikel.menge }}</td>
+            <td>
+                <form action="/lager_entnahme/{{ artikel._id }}" method="POST">
+                    <input type="number" name="entnahme" placeholder="Menge" required min="1">
+                    <button type="submit">Entnehmen</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <a href="/">Zurück zur Lagerverwaltung</a>
+
+    <div id="error-message" class="error"></div>
+</body>
+</html>

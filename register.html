@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrieren</title>
+</head>
+<body>
+    <h2>Registrieren</h2>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <p style="color: red;">{{ message }}</p>
+        {% endfor %}
+    {% endwith %}
+    
+    <form action="/register" method="POST" onsubmit="return validatePassword()">
+        <input type="text" name="username" placeholder="Benutzername" required>
+        <input type="password" id="password" name="password" placeholder="Passwort" required>
+        <button type="submit">Registrieren</button>
+    </form>
+    
+    <p id="passwordError" style="color: red;"></p>
+    <p>Bereits registriert? <a href="/login">Zum Login</a></p>
+    
+    <script>
+        function validatePassword() {
+            let password = document.getElementById("password").value;
+            let errorMsg = document.getElementById("passwordError");
+            let errors = [];
+        
+            if (!/[A-Z]/.test(password)) {
+                errors.push("mindestens einen Großbuchstaben");
+            }
+            if (!/[!@#$%^&*(),.?\":{}|<>]/.test(password)) {
+                errors.push("mindestens ein Sonderzeichen");
+            }
+            if (password.length < 8) {
+                errors.push("mindestens 8 Zeichen");
+            }
+        
+            if (errors.length > 0) {
+                errorMsg.innerText = "⚠️ Das Passwort muss " + errors.join(", ") + " enthalten!";
+                return false;
+            }
+        
+            errorMsg.innerText = "";  // Keine Fehler, also Nachricht zurücksetzen
+            return true;
+        }
+        </script>        
+</body>
+</html>
